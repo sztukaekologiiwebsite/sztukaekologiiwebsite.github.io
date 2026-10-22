@@ -1,0 +1,164 @@
+/* ==========================================================================
+   Home — "Trash to Treasure"
+   Litter rebuilds itself into the logo, a puppet, a guitar and a leaf.
+   ========================================================================== */
+
+.t2t-home { background: #0b1f14; }
+
+/* Header on the dark home page */
+.t2t-home .site-header { color: var(--cream); }
+.t2t-home .site-header.is-scrolled { background: rgba(11, 31, 20, 0.72); box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06); }
+.t2t-home .brand .b1 { color: var(--leaf); }
+.t2t-home .brand .b2 { color: var(--sky); }
+.t2t-home .nav a:hover { background: rgba(255, 255, 255, 0.1); }
+.t2t-home .nav a[aria-current="page"] { background: var(--leaf); color: var(--forest); }
+.t2t-home .menu-toggle { background: var(--leaf); color: var(--forest); }
+
+/* Scene */
+.t2t-scene { position: fixed; inset: 0; z-index: 0; width: 100%; height: 100%; display: block; }
+.t2t-vignette { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(120% 90% at 50% 50%, transparent 55%, rgba(5, 15, 10, 0.75)); }
+.t2t-fallback { position: fixed; inset: 0; z-index: 0; display: none; place-items: center; background: radial-gradient(circle at 30% 30%, #1d4a2c, #0b1f14 70%); }
+.t2t-fallback img { width: min(320px, 50vw); opacity: 0.5; }
+.no-webgl .t2t-fallback { display: grid; }
+
+/* Stages */
+.t2t-stages { position: relative; z-index: 1; color: var(--cream); }
+.t2t-stage { min-height: 100vh; display: flex; align-items: center; padding: calc(var(--header-h) + 2rem) var(--gutter) 5rem; }
+.t2t-stage.t2t-right { justify-content: flex-end; }
+.t2t-stage.t2t-center { justify-content: center; text-align: center; }
+.t2t-copy { max-width: 500px; }
+.t2t-center .t2t-copy { max-width: 900px; }
+.t2t-stage .eyebrow { color: var(--leaf); }
+.t2t-stage h2 { font-size: clamp(2.6rem, 6.5vw, 5.6rem); margin-bottom: 1.4rem; }
+.t2t-stage p { color: rgba(246, 242, 233, 0.84); font-size: clamp(1.05rem, 1.5vw, 1.25rem); margin: 0 0 1.8rem; }
+.t2t-stage h1, .t2t-stage h2, .t2t-stage p { text-shadow: 0 2px 24px rgba(11, 31, 20, 0.9); }
+.t2t-title { font-size: clamp(2.6rem, 8.2vw, 8.6rem); font-weight: 800; letter-spacing: -0.05em; line-height: 0.88; }
+.t2t-accent { color: var(--leaf); }
+.t2t-accent-blue { color: var(--blue); }
+.t2t-hero .t2t-sub { margin: 2rem auto 0; max-width: 46ch; }
+.t2t-hint { display: inline-flex; align-items: center; gap: 0.8rem; margin-top: 2.2rem; font-size: 0.85rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(246, 242, 233, 0.7); }
+.t2t-mouse { width: 22px; height: 34px; border: 2px solid currentColor; border-radius: 12px; position: relative; }
+.t2t-mouse::after { content: ""; position: absolute; left: 50%; top: 6px; width: 3px; height: 7px; margin-left: -1.5px; border-radius: 2px; background: var(--leaf); animation: t2t-wheel 1.6s var(--ease) infinite; }
+@keyframes t2t-wheel { to { transform: translateY(10px); opacity: 0; } }
+.t2t-btns { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+.t2t-center .t2t-btns { justify-content: center; }
+.t2t-stage .btn { --btn-bg: var(--leaf); --btn-fg: var(--forest); }
+.t2t-stage .btn::before { background: var(--cream); }
+.t2t-stage .btn--ghost { --btn-bg: transparent; --btn-fg: var(--cream); }
+
+.t2t-progress { position: fixed; z-index: 15; left: var(--gutter); bottom: 1.6rem; font-family: var(--font-display); font-weight: 700; font-size: 0.9rem; letter-spacing: 0.12em; color: rgba(246, 242, 233, 0.6); display: flex; align-items: center; gap: 0.8rem; transition: opacity 0.4s; }
+.t2t-progress .bar { width: 120px; height: 2px; background: rgba(246, 242, 233, 0.2); border-radius: 2px; overflow: hidden; }
+.t2t-progress .bar span { display: block; height: 100%; background: var(--leaf); transform-origin: left; transform: scaleX(0); }
+.t2t-progress .name { color: var(--cream); }
+.t2t-progress.is-hidden { opacity: 0; }
+
+@media (max-width: 760px) {
+  .t2t-stage, .t2t-stage.t2t-right { justify-content: center; align-items: flex-end; padding-bottom: 4rem; }
+  .t2t-stage .t2t-copy { background: rgba(11, 31, 20, 0.72); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); padding: 1.5rem; border-radius: 22px; }
+  .t2t-stage.t2t-hero { align-items: center; }
+  .t2t-stage.t2t-hero .t2t-copy { background: none; backdrop-filter: none; -webkit-backdrop-filter: none; padding: 0; }
+  .t2t-progress { display: none; }
+}
+
+/* Everything after the stages covers the 3D scene */
+.t2t-rest { position: relative; z-index: 2; background: var(--cream); color: var(--ink); border-radius: clamp(28px, 5vw, 64px) clamp(28px, 5vw, 64px) 0 0; overflow: hidden; padding-top: clamp(2rem, 5vw, 4rem); }
+.t2t-rest .marquee--tilt { margin-top: 0; }
+.t2t-home .site-footer { margin-top: 0; z-index: 2; }
+
+/* ==========================================================================
+   Featured project poster — Master of Puppets (hangs on marionette strings)
+   ========================================================================== */
+.poster-sec { padding: clamp(3rem, 7vw, 6rem) 0 clamp(4rem, 9vw, 8rem); }
+.poster-grid { display: grid; gap: clamp(2.5rem, 6vw, 5rem); align-items: center; grid-template-columns: 1fr; }
+@media (min-width: 960px) { .poster-grid { grid-template-columns: 1fr 1fr; } }
+.poster-copy .lead { margin-top: 1.6rem; }
+.poster-btns { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 2rem; }
+
+.poster-rig { position: relative; justify-self: center; width: min(440px, 86vw); padding-top: 96px; transform-origin: 50% 0; will-change: transform; }
+.poster-strings { position: absolute; left: 6%; top: 14px; width: 88%; height: 86px; overflow: visible; }
+.poster-strings path { fill: none; stroke: rgba(15, 36, 24, 0.55); stroke-width: 1.4; vector-effect: non-scaling-stroke; }
+.poster-bar { position: absolute; left: 50%; top: 0; width: 46%; height: 16px; margin-left: -23%; border-radius: 4px; background: linear-gradient(#b98652, #8f6438); box-shadow: 0 6px 12px -6px rgba(0, 0, 0, 0.5); }
+.poster-bar::after { content: ""; position: absolute; left: 50%; top: -10px; width: 14px; height: 36px; margin-left: -7px; border-radius: 4px; background: linear-gradient(90deg, #a87644, #8f6438); }
+
+.poster {
+  position: relative; display: flex; flex-direction: column; gap: 0.9rem; isolation: isolate;
+  padding: 1.3rem 1.3rem 1.1rem; color: var(--forest);
+  background: var(--sun);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.05), 0 40px 60px -30px rgba(15, 42, 27, 0.55);
+  transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease);
+}
+.poster::before { /* paper grain */
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: 0.55; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .45 0 0 0 0 .2 0 0 0 .45 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.poster:hover { transform: translateY(-6px) scale(1.015); box-shadow: 0 2px 0 rgba(0, 0, 0, 0.05), 0 55px 70px -30px rgba(15, 42, 27, 0.6); }
+.poster-tape { position: absolute; top: -12px; width: 86px; height: 26px; background: rgba(255, 255, 255, 0.55); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12); z-index: 3; }
+.poster-tape--l { left: 8%; transform: rotate(-8deg); }
+.poster-tape--r { right: 8%; transform: rotate(7deg); }
+
+.poster-kicker { display: flex; justify-content: space-between; gap: 1rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; border-bottom: 2px solid var(--forest); padding-bottom: 0.6rem; }
+
+.poster-photo { position: relative; display: block; width: 80%; margin: 0.4rem auto 0; aspect-ratio: 1 / 1.02; border-radius: 999px 999px 0 0; overflow: hidden; background: var(--blue); }
+.poster-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; filter: grayscale(1) contrast(1.25) brightness(1.05); mix-blend-mode: multiply; transition: transform 1.2s var(--ease); }
+.poster-photo::after { /* halftone dots */
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.35; mix-blend-mode: soft-light;
+  background-image: radial-gradient(circle, #fff 1.2px, transparent 1.6px); background-size: 6px 6px;
+}
+.poster:hover .poster-photo img { transform: scale(1.06); }
+
+.poster-stamp {
+  position: absolute; right: 7%; top: 16%; z-index: 2; width: 92px; height: 92px; border-radius: 50%;
+  display: grid; place-items: center; text-align: center; transform: rotate(14deg);
+  background: var(--red, #e0533d); color: #fff; font-size: 0.68rem; font-weight: 800; line-height: 1.1; letter-spacing: 0.06em; text-transform: uppercase;
+  box-shadow: 0 0 0 4px var(--sun), 0 0 0 6px #e0533d;
+}
+
+.poster-title { display: flex; flex-direction: column; align-items: center; margin-top: -2.6rem; position: relative; z-index: 2; font-family: var(--font-display); font-weight: 800; letter-spacing: -0.05em; line-height: 0.82; text-align: center; }
+.poster-title .pt-1, .poster-title .pt-3 { font-size: clamp(3rem, 12.5vw, 4.9rem); text-transform: uppercase; }
+.poster-title .pt-1 { color: var(--forest); text-shadow: 3px 3px 0 var(--sun), -3px -3px 0 var(--sun), 3px -3px 0 var(--sun), -3px 3px 0 var(--sun); }
+.poster-title .pt-2 { font-size: clamp(1.6rem, 6vw, 2.2rem); font-weight: 500; font-style: italic; color: #e0533d; letter-spacing: 0; margin: 0.1rem 0 0.15rem; }
+.poster-title .pt-3 { color: var(--forest); }
+
+.poster-when { display: flex; justify-content: space-between; gap: 1rem; font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em; border-top: 2px solid var(--forest); border-bottom: 2px solid var(--forest); padding: 0.55rem 0; }
+.poster-stats { display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; }
+.poster-stats > span { display: flex; flex-direction: column; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+.poster-stats > span + span { border-left: 2px solid rgba(15, 42, 27, 0.25); }
+.poster-stats b { font-family: var(--font-display); font-size: 2.2rem; line-height: 1; letter-spacing: -0.04em; }
+.poster-flags { display: flex; justify-content: center; gap: 0.35rem; flex-wrap: wrap; }
+.poster-flags span { font-size: 0.7rem; font-weight: 800; letter-spacing: 0.08em; color: #fff; padding: 0.25rem 0.5rem; border-radius: 4px; }
+.f-pl { background: #dc143c; } .f-ro { background: #002b7f; } .f-bg { background: #00966e; } .f-sk { background: #0b4ea2; } .f-tr { background: #e30a17; }
+.poster-foot { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-top: 0.2rem; }
+.poster-foot .eu-plate { padding: 0.45rem 0.7rem; border-radius: 8px; }
+.poster-foot .eu-plate img { height: 26px; }
+.poster-org { font-family: var(--font-display); font-weight: 800; text-transform: uppercase; font-size: 0.85rem; line-height: 0.95; text-align: right; letter-spacing: 0.02em; }
+@media (max-width: 420px) { .poster-stamp { width: 74px; height: 74px; font-size: 0.58rem; } .poster-foot .eu-plate img { height: 20px; } }
+.poster-title .pt-0 { font-size: clamp(1.1rem, 4vw, 1.5rem); font-weight: 600; font-style: italic; letter-spacing: 0; color: #e0533d; margin-bottom: 0.2rem; }
+.poster-title .pt-1, .poster-title .pt-3 { font-size: clamp(2.7rem, 11vw, 4.3rem); }
+/* Poster as a finished image */
+.poster--img { padding: 0; background: none; gap: 0; }
+.poster--img::before { display: none; }
+.poster--img img { display: block; width: 100%; height: auto; }
+
+/* Poster: 3D reveal + holographic tilt + light sweep (replaces the swinging rig) */
+.poster-rig[data-poster3d] { padding-top: 0; perspective: 1300px; }
+.poster-rig[data-poster3d] .poster { transform-style: preserve-3d; will-change: transform; border-radius: 6px; overflow: hidden;
+  box-shadow: 0 50px 80px -40px rgba(15, 42, 27, 0.6), 0 18px 30px -18px rgba(15, 42, 27, 0.35); }
+.poster-rig[data-poster3d] .poster:hover { transform: none; }
+.poster-glare { position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 0.4s;
+  background: radial-gradient(circle at var(--gx, 50%) var(--gy, 30%), rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 45%); mix-blend-mode: soft-light; }
+.poster-rig[data-poster3d] .poster:hover .poster-glare { opacity: 1; }
+.poster-rig[data-poster3d] .poster::after { content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.6) 50%, transparent 62%); background-size: 260% 100%;
+  background-position: 160% 0; mix-blend-mode: soft-light; animation: poster-shine 6s ease-in-out 1.5s infinite; }
+@keyframes poster-shine { 0%, 62% { background-position: 160% 0; } 100% { background-position: -60% 0; } }
+@media (prefers-reduced-motion: reduce) { .poster-rig[data-poster3d] .poster::after { animation: none; } }
+
+/* Logo readable over the flying litter: frosted pill + light badge for the mark */
+.t2t-home .brand {
+  padding: 5px 16px 5px 5px; border-radius: 999px;
+  background: rgba(11, 31, 20, 0.62); -webkit-backdrop-filter: blur(12px) saturate(1.3); backdrop-filter: blur(12px) saturate(1.3);
+  box-shadow: 0 0 0 1px rgba(246, 242, 233, 0.12), 0 10px 30px -12px rgba(0, 0, 0, 0.6);
+}
+.t2t-home .brand img { width: 42px; height: 42px; padding: 4px; border-radius: 50%; background: var(--cream); object-fit: contain; }
+.t2t-home .site-header.is-scrolled .brand { background: transparent; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+@media (max-width: 380px) { .t2t-home .brand { padding-right: 12px; } .t2t-home .brand img { width: 36px; height: 36px; } }

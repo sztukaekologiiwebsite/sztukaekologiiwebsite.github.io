@@ -1,0 +1,138 @@
+/* ==========================================================================
+   Extras: gallery toggle, back-to-top, chapter nav, skip intro
+   ========================================================================== */
+.gallery-grid.is-collapsed > .gallery-item:nth-child(n+9) { display: none; }
+.gallery-more { display: flex; justify-content: center; margin-top: clamp(1.5rem, 3vw, 2.5rem); }
+
+.to-top { position: fixed; right: clamp(14px, 2.4vw, 28px); bottom: clamp(14px, 2.4vw, 28px); z-index: 90; width: 52px; height: 52px; border-radius: 50%;
+  display: grid; place-items: center; background: var(--forest); color: var(--cream); border: 0; cursor: pointer; box-shadow: 0 14px 30px -12px rgba(15, 42, 27, 0.6);
+  opacity: 0; transform: translateY(20px) scale(0.8); pointer-events: none; transition: opacity 0.4s, transform 0.5s var(--ease), background-color 0.3s; }
+.to-top svg { width: 22px; height: 22px; transition: transform 0.4s var(--ease); }
+.to-top.is-on { opacity: 1; transform: none; pointer-events: auto; }
+.to-top:hover { background: var(--green); }
+.to-top:hover svg { transform: translateY(-3px); }
+.to-top:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+.menu-open .to-top { opacity: 0; pointer-events: none; }
+
+.toc { position: fixed; left: clamp(14px, 1.6vw, 26px); top: 50%; z-index: 80; transform: translate(-12px, -50%); opacity: 0; pointer-events: none; transition: opacity 0.4s, transform 0.5s var(--ease); }
+.toc.is-on { opacity: 1; transform: translate(0, -50%); pointer-events: auto; }
+.toc ol { list-style: none; margin: 0; padding: 10px 8px; display: flex; flex-direction: column; gap: 2px; border-radius: 999px;
+  background: rgba(246, 242, 233, 0.78); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); box-shadow: 0 0 0 1px rgba(15, 36, 24, 0.08), 0 12px 30px -16px rgba(15, 42, 27, 0.4); }
+.toc a { position: relative; display: grid; place-items: center; width: 26px; height: 26px; }
+.toc-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(15, 36, 24, 0.28); transition: transform 0.4s var(--ease), background-color 0.3s; }
+.toc a.is-on .toc-dot { background: var(--green); transform: scale(1.6); }
+.toc a:hover .toc-dot { background: var(--blue); }
+.toc-label { position: absolute; left: 36px; top: 50%; transform: translate(-6px, -50%); white-space: nowrap; padding: 0.35rem 0.75rem; border-radius: 999px; font-size: 0.8rem; font-weight: 600;
+  background: var(--forest); color: var(--cream); opacity: 0; pointer-events: none; transition: opacity 0.25s, transform 0.35s var(--ease); }
+.toc a:hover .toc-label, .toc a:focus-visible .toc-label { opacity: 1; transform: translate(0, -50%); }
+
+/* Skip intro (home) */
+.t2t-skip { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 1rem; padding: 0.55rem 1.1rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.04em;
+  color: var(--cream); background: rgba(246, 242, 233, 0.1); box-shadow: 0 0 0 1px rgba(246, 242, 233, 0.25); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  transition: background-color 0.3s, transform 0.4s var(--ease); }
+.t2t-skip:hover { background: rgba(246, 242, 233, 0.22); transform: translateY(2px); }
+
+/* ==========================================================================
+   Trash-band soundboard (Recykling Idei cover)
+   ========================================================================== */
+.ph--band { overflow: hidden; }
+.sb-layer { position: absolute; z-index: 2; }
+.sb-spot { --s: clamp(38px, 4.4vw, 56px); position: absolute; left: var(--x); top: var(--y); width: var(--s); height: var(--s); margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
+  border-radius: 50%; border: 0; padding: 0; cursor: pointer; background: rgba(255, 255, 255, 0.28); box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.85), 0 6px 18px rgba(0, 0, 0, 0.3);
+  -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); transition: transform 0.35s var(--ease), background-color 0.3s; }
+.sb-spot::before, .sb-spot::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid #fff; animation: sb-pulse 2.4s ease-out infinite; pointer-events: none; }
+.sb-spot::after { animation-delay: 1.2s; }
+.sb-spot:hover, .sb-spot:focus-visible { transform: scale(1.15); background: rgba(255, 205, 77, 0.55); outline: none; }
+.sb-spot.is-hit { animation: sb-hit 0.45s var(--ease); }
+.sb-label { position: absolute; left: 50%; bottom: calc(100% + 10px); transform: translate(-50%, 6px); white-space: nowrap; padding: 0.35rem 0.7rem; border-radius: 999px;
+  background: var(--forest); color: var(--cream); font-size: 0.78rem; font-weight: 700; opacity: 0; pointer-events: none; transition: opacity 0.25s, transform 0.3s var(--ease); }
+.sb-spot:hover .sb-label, .sb-spot:focus-visible .sb-label { opacity: 1; transform: translate(-50%, 0); }
+.sb-note { position: absolute; left: 50%; top: 0; font-size: 1.5rem; font-weight: 800; color: #fff; text-shadow: 0 2px 6px rgba(0, 0, 0, 0.45); pointer-events: none; animation: sb-note 1.4s ease-out both; }
+.sb-hint { position: absolute; z-index: 3; left: clamp(12px, 2vw, 24px); bottom: clamp(12px, 2vw, 24px); display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.5rem 0.95rem 0.5rem 0.55rem; border-radius: 999px; background: rgba(15, 42, 27, 0.82); color: var(--cream); font-size: 0.85rem; font-weight: 600;
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transition: opacity 0.6s, transform 0.6s var(--ease); pointer-events: none; }
+.sb-hint-ic { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--sun); color: var(--forest); font-size: 0.95rem; animation: sb-bob 1.6s ease-in-out infinite; }
+.sb-played .sb-hint { opacity: 0; transform: translateY(10px); }
+@keyframes sb-pulse { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.9); opacity: 0; } }
+@keyframes sb-hit { 0% { transform: scale(1); } 35% { transform: scale(1.35); } 100% { transform: scale(1); } }
+@keyframes sb-note { 0% { transform: translate(-50%, 0) scale(0.6); opacity: 0; } 15% { opacity: 1; } 100% { transform: translate(calc(-50% + var(--dx)), -110px) scale(1.2) rotate(18deg); opacity: 0; } }
+@keyframes sb-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px) rotate(-10deg); } }
+@media (prefers-reduced-motion: reduce) { .sb-spot::before, .sb-spot::after, .sb-hint-ic { animation: none; } }
+
+/* ==========================================================================
+   Puppet theatre (The Masters of Puppets)
+   ========================================================================== */
+.puppet-sec { overflow: hidden; }
+.stage { position: relative; margin-top: clamp(1.5rem, 4vw, 3rem); height: clamp(420px, 48vw, 600px); border-radius: var(--radius); overflow: hidden;
+  background: radial-gradient(ellipse at 50% 0%, #fff3d1 0%, #f9e4b5 35%, #f0c98a 100%); box-shadow: inset 0 -40px 60px -30px rgba(120, 70, 20, 0.35); touch-action: pan-y; }
+.stage::before { content: ""; position: absolute; inset: 0; opacity: 0.25; background-image: radial-gradient(rgba(180, 90, 30, 0.6) 1px, transparent 1.4px); background-size: 9px 9px;
+  -webkit-mask: radial-gradient(ellipse at 50% 30%, transparent 30%, #000 80%); mask: radial-gradient(ellipse at 50% 30%, transparent 30%, #000 80%); }
+.stage-bar { position: absolute; z-index: 3; left: 4%; right: 4%; top: 18px; height: 14px; border-radius: 8px; background: linear-gradient(#b98652, #8f6438); box-shadow: 0 6px 12px -6px rgba(0, 0, 0, 0.5); }
+.stage-curtain { position: absolute; z-index: 4; top: 0; bottom: 0; width: 9%; background: repeating-linear-gradient(90deg, #c2302a 0 14px, #a8241f 14px 24px, #d23a33 24px 34px); box-shadow: 0 0 30px rgba(0, 0, 0, 0.35); }
+.stage-curtain--l { left: 0; border-radius: 0 0 60% 0 / 0 0 22% 0; }
+.stage-curtain--r { right: 0; border-radius: 0 0 0 60% / 0 0 0 22%; }
+.stage-floor { position: absolute; z-index: 1; left: 0; right: 0; bottom: 0; height: 16%; background: linear-gradient(#8f6438, #6e4a28); box-shadow: inset 0 6px 0 rgba(255, 255, 255, 0.15); }
+.puppet { position: absolute; z-index: 2; top: 32px; left: var(--x); width: var(--w); transform-origin: 50% 0; transform: translateX(-50%); cursor: grab; touch-action: none; outline: none;
+  display: flex; flex-direction: column; align-items: center; }
+.puppet.is-grabbed { cursor: grabbing; z-index: 5; }
+.puppet:focus-visible img { filter: drop-shadow(0 0 6px var(--blue)); }
+.p-string { width: 1.5px; height: var(--len); background: rgba(40, 30, 20, 0.55); flex-shrink: 0; }
+.p-string--b { position: absolute; top: 0; height: calc(var(--len) + 18%); transform: translateX(-28%) rotate(4deg); transform-origin: 50% 0; opacity: 0.7; }
+.puppet picture { display: block; width: 100%; }
+.puppet img { display: block; width: 100%; height: auto; user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 14px 14px rgba(80, 40, 10, 0.35)); transition: transform 0.3s var(--ease); }
+.puppet:hover img { transform: scale(1.04); }
+.stage-hint { position: absolute; z-index: 6; left: 50%; bottom: 4%; transform: translateX(-50%); padding: 0.45rem 0.95rem; border-radius: 999px; background: rgba(15, 42, 27, 0.85); color: var(--cream);
+  font-size: 0.85rem; font-weight: 600; pointer-events: none; transition: opacity 0.6s; white-space: nowrap; }
+.stage-hint::before { content: "\270B  "; }
+.stage.was-used .stage-hint { opacity: 0; }
+@media (max-width: 700px) {
+  .stage { height: 440px; }
+  .puppet { width: calc(var(--w) * 1.45); }
+  .stage-curtain { width: 7%; }
+}
+
+/* ==========================================================================
+   Scroll-drawn vine (About)
+   ========================================================================== */
+.vine { position: absolute; z-index: 3; left: 0; top: 0; width: 120px; pointer-events: none; overflow: visible; }
+.vine-stem { fill: none; stroke: var(--green); stroke-width: 3; stroke-linecap: round; opacity: 0.75; }
+.vine-leaf path { transform-box: fill-box; transform-origin: 0 50%; transform: scale(0); transition: transform 0.6s var(--ease); }
+.vine-leaf.is-on path { transform: scale(1); }
+.vine .leaf-g { fill: var(--leaf); }
+.vine .leaf-b { fill: var(--sky); }
+
+/* ==========================================================================
+   Easter egg: bottle-cap rain
+   ========================================================================== */
+.cap-rain { position: fixed; inset: 0; z-index: 200; pointer-events: none; overflow: hidden; }
+.cap { position: absolute; top: 0; border-radius: 50%;
+  background: radial-gradient(circle, var(--c) 0 52%, rgba(0, 0, 0, 0.18) 53% 56%, transparent 57%), repeating-conic-gradient(var(--c) 0 6deg, color-mix(in srgb, var(--c) 75%, #000) 6deg 12deg);
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.3), 0 4px 8px rgba(0, 0, 0, 0.25); }
+.cap-msg { position: absolute; left: 50%; top: 40%; transform: translate(-50%, -50%); padding: 0.8rem 1.6rem; border-radius: 999px; background: var(--forest); color: var(--cream); white-space: nowrap;
+  font-family: var(--font-display); font-weight: 800; font-size: clamp(1.3rem, 4vw, 2.4rem); box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.6); animation: cap-msg 5s ease both; }
+@keyframes cap-msg { 0% { opacity: 0; transform: translate(-50%, -30%) scale(0.8); } 12%, 75% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -60%) scale(0.95); } }
+
+/* ==========================================================================
+   404
+   ========================================================================== */
+.nf { position: relative; overflow: hidden; min-height: 92svh; display: flex; align-items: center; padding: calc(var(--header-h) + 2rem) 0 4rem; }
+.nf-grid { position: relative; z-index: 1; display: grid; gap: 3rem; align-items: center; grid-template-columns: 1fr; }
+@media (min-width: 900px) { .nf-grid { grid-template-columns: 1.2fr 1fr; } }
+.nf .lead { max-width: 46ch; margin-top: 1.4rem; }
+.nf-btns { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 2rem; }
+.nf-art { position: relative; justify-self: center; display: flex; flex-direction: column; align-items: center; }
+.nf-num { display: flex; align-items: center; font-family: var(--font-display); font-weight: 800; font-size: clamp(6rem, 18vw, 12rem); line-height: 1; letter-spacing: -0.05em; color: var(--forest); }
+.nf-ball { position: relative; display: inline-block; width: 0.72em; height: 0.72em; margin: 0 0.04em; border-radius: 46% 54% 50% 48% / 52% 46% 54% 48%;
+  background: radial-gradient(circle at 35% 30%, #fff 0 18%, #ece6d6 40%, #cfc6b0 100%); box-shadow: inset -6px -8px 0 rgba(0, 0, 0, 0.08), 0 10px 18px rgba(15, 42, 27, 0.25);
+  animation: nf-ball 3.2s cubic-bezier(.5, 0, .5, 1) infinite; }
+.nf-ball::before, .nf-ball::after { content: ""; position: absolute; inset: 18% 22%; border-top: 3px solid rgba(0, 0, 0, 0.12); border-radius: 50%; transform: rotate(-20deg); }
+.nf-ball::after { inset: 40% 18% 28% 30%; transform: rotate(30deg); }
+.nf-bin { width: clamp(120px, 14vw, 170px); height: auto; margin-top: -0.5rem; transform-origin: 50% 100%; animation: nf-bin 3.2s ease-in-out infinite; }
+@keyframes nf-ball { 0%, 100% { transform: translate(0, 0) rotate(0); } 25% { transform: translate(0, -40px) rotate(120deg); } 50% { transform: translate(0, 0) rotate(200deg); } 60% { transform: translate(0, -12px) rotate(230deg); } 70% { transform: translate(0, 0) rotate(250deg); } }
+@keyframes nf-bin { 0%, 45%, 100% { transform: rotate(0); } 50% { transform: rotate(-4deg); } 55% { transform: rotate(3deg); } 60% { transform: rotate(0); } }
+@media (prefers-reduced-motion: reduce) { .nf-ball, .nf-bin { animation: none; } }
+@media (max-width: 700px) { .stage .puppet { left: var(--xm); width: var(--wm); } .stage .p-string { height: var(--lm); } .stage .p-string--b { height: calc(var(--lm) + 14%); } }
+/* hero: "Scroll down" hint and "Skip intro" sit on one centred line */
+.t2t-hero .t2t-hint, .t2t-hero .t2t-skip { vertical-align: middle; margin-top: 2.2rem; }
+.t2t-hero .t2t-skip { margin-top: 2.2rem; margin-left: 1.25rem; }
+@media (max-width: 480px) { .t2t-hero .t2t-skip { margin: 1rem 0 0; } .t2t-hero .t2t-hint { display: flex; justify-content: center; } }
