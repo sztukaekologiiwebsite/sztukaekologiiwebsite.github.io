@@ -1,7 +1,7 @@
 /* ==========================================================================
    Sztuka Ekologii — extras
-   Gallery "show all", back-to-top, chapter nav, skip intro, trash-band
-   soundboard, swinging trash puppets, scroll-drawn vine, bottle-cap rain.
+   Gallery "show all", back-to-top, chapter nav, skip intro,
+   swinging trash puppets, scroll-drawn vine, bottle-cap rain.
    ========================================================================== */
 (() => {
   const $ = (s, c = document) => c.querySelector(s);
@@ -59,73 +59,6 @@
       };
       window.addEventListener('scroll', vis, { passive: true }); vis();
     }
-  }
-
-  /* ---------- Trash-band soundboard (Web Audio, no files) ---------- */
-  const board = $('[data-soundboard]');
-  if (board) {
-    let ctx = null, master = null;
-    const ac = () => {
-      if (!ctx) {
-        ctx = new (window.AudioContext || window.webkitAudioContext)();
-        master = ctx.createDynamicsCompressor(); master.connect(ctx.destination);
-      }
-      if (ctx.state === 'suspended') ctx.resume();
-      return ctx;
-    };
-    const noiseBuf = (dur) => { const b = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate), d = b.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; return b; };
-    const env = (g, t, a, peak, dec) => { g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(peak, t + a); g.gain.exponentialRampToValueAtTime(0.0001, t + a + dec); };
-    // Karplus–Strong plucked string
-    const pluck = (freq, t, dur = 1.6, bright = 0.5, vol = 0.5) => {
-      const sr = ctx.sampleRate, N = Math.round(sr / freq), len = Math.round(sr * dur);
-      const buf = ctx.createBuffer(1, len, sr), d = buf.getChannelData(0), ring = new Float32Array(N);
-      for (let i = 0; i < N; i++) ring[i] = Math.random() * 2 - 1;
-      let idx = 0, prev = 0;
-      for (let i = 0; i < len; i++) { const cur = ring[idx]; const nxt = (cur * (0.5 + bright * 0.5) + prev * (0.5 - bright * 0.5)) * 0.996; d[i] = cur; prev = cur; ring[idx] = nxt; idx = (idx + 1) % N; }
-      const src = ctx.createBufferSource(), g = ctx.createGain(); src.buffer = buf; g.gain.value = vol; src.connect(g).connect(master); src.start(t);
-    };
-    const sounds = {
-      drums() { // bucket kick + tin-can snare + hat
-        const t = ac().currentTime;
-        [[0, 'k'], [0.18, 'h'], [0.27, 's'], [0.45, 'h'], [0.54, 'k'], [0.63, 'k'], [0.72, 's']].forEach(([dt, k]) => {
-          const at = t + dt;
-          if (k === 'k') { const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(140, at); o.frequency.exponentialRampToValueAtTime(48, at + 0.25); env(g, at, 0.005, 0.9, 0.35); o.connect(g).connect(master); o.start(at); o.stop(at + 0.45); }
-          else { const n = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain(); n.buffer = noiseBuf(0.3); f.type = k === 's' ? 'bandpass' : 'highpass'; f.frequency.value = k === 's' ? 2400 : 7000; f.Q.value = k === 's' ? 1.5 : 0.7; env(g, at, 0.002, k === 's' ? 0.7 : 0.25, k === 's' ? 0.16 : 0.05); n.connect(f).connect(g).connect(master); n.start(at); n.stop(at + 0.3);
-            if (k === 's') { const o = ctx.createOscillator(), g2 = ctx.createGain(); o.type = 'triangle'; o.frequency.value = 330; env(g2, at, 0.002, 0.25, 0.08); o.connect(g2).connect(master); o.start(at); o.stop(at + 0.15); } }
-        });
-      },
-      guitar() { const t = ac().currentTime; [164.8, 207.7, 246.9, 329.6, 415.3].forEach((f, i) => pluck(f, t + i * 0.045, 2.2, 0.55, 0.32)); [329.6, 246.9, 207.7].forEach((f, i) => pluck(f, t + 0.55 + i * 0.12, 1.4, 0.6, 0.28)); },
-      bass() { const t = ac().currentTime; [[82.4, 0], [82.4, 0.28], [110, 0.42], [98, 0.7]].forEach(([f, dt]) => pluck(f, t + dt, 1.2, 0.25, 0.75)); },
-      xylo() { // bottles: sine + inharmonic partial, pentatonic run
-        const t = ac().currentTime, notes = [523.3, 587.3, 659.3, 784, 880, 1046.5];
-        const run = [0, 2, 4, 5, 4, 3].map(i => notes[i]);
-        run.forEach((f, i) => { const at = t + i * 0.13; [[1, 0.5], [2.76, 0.12], [5.4, 0.05]].forEach(([m, v]) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sine'; o.frequency.value = f * m; env(g, at, 0.004, v, m === 1 ? 0.9 : 0.25); o.connect(g).connect(master); o.start(at); o.stop(at + 1); }); });
-      },
-      shaker() { const t = ac().currentTime; [0, 0.16, 0.24, 0.4, 0.48, 0.64].forEach((dt, i) => { const at = t + dt, n = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain(); n.buffer = noiseBuf(0.2); f.type = 'bandpass'; f.frequency.value = 6500 + (i % 2) * 1500; f.Q.value = 0.9; env(g, at, 0.015, i % 2 ? 0.25 : 0.45, 0.09); n.connect(f).connect(g).connect(master); n.start(at); n.stop(at + 0.2); }); }
-    };
-    const NOTES = ['♪', '♫', '♬', '♩'];
-    const burst = (spot) => {
-      if (reduce) return;
-      for (let i = 0; i < 4; i++) {
-        const n = document.createElement('span'); n.className = 'sb-note'; n.textContent = NOTES[(Math.random() * 4) | 0];
-        n.style.setProperty('--dx', (Math.random() * 80 - 40).toFixed(0) + 'px'); n.style.animationDelay = (i * 0.09) + 's';
-        spot.appendChild(n); setTimeout(() => n.remove(), 1600);
-      }
-    };
-    $$('.sb-spot', board).forEach(spot => spot.addEventListener('click', () => {
-      try { sounds[spot.dataset.sound](); } catch (_) {}
-      spot.classList.remove('is-hit'); void spot.offsetWidth; spot.classList.add('is-hit'); burst(spot);
-      board.closest('.project-cover')?.classList.add('sb-played');
-    }));
-    // keep hotspots glued to the visible (object-fit: cover) image
-    const ph = board.parentElement, img = $('img', ph);
-    const place = () => {
-      const W = ph.clientWidth, H = ph.clientHeight, iw = img.naturalWidth || 1776, ih = img.naturalHeight || 896;
-      const s = Math.max(W / iw, H / ih), w = iw * s, h = ih * s;
-      Object.assign(board.style, { width: w + 'px', height: h + 'px', left: (W - w) / 2 + 'px', top: (H - h) / 2 + 'px' });
-    };
-    if (img.complete) place(); else img.addEventListener('load', place);
-    window.addEventListener('resize', place);
   }
 
   /* ---------- Swinging trash puppets ---------- */
@@ -234,7 +167,7 @@
         { transform: `translateY(${H + 80}px) rotate(${(Math.random() * 2 - 1) * 720}deg)` }
       ], { duration: dur * 1000, delay: delay * 1000, easing: 'cubic-bezier(.45,0,.9,.6)', fill: 'both' });
     }
-    const msg = document.createElement('div'); msg.className = 'cap-msg'; msg.textContent = PL ? '♻ Recykling idei! ♻' : '♻ Recycling ideas! ♻';
+    const msg = document.createElement('div'); msg.className = 'cap-msg'; msg.textContent = PL ? '♻ Drugie życie! ♻' : '♻ Second life! ♻';
     box.appendChild(msg);
     document.body.appendChild(box);
     setTimeout(() => box.remove(), 5200);

@@ -1,7 +1,7 @@
 /* ==========================================================================
    Home — "Trash to Treasure" 3D scene (Three.js)
    Litter drifts in a dark field, then rebuilds itself on scroll into the
-   logo, a puppet, a guitar and a leaf.
+   logo, a puppet and a leaf.
    ========================================================================== */
 (() => {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -121,17 +121,6 @@
     while (k < N) { const j = (Math.random() * k) | 0; put((pos[j * 3] / worldW + .5) * size, (-pos[j * 3 + 1] / worldW + .5) * size, [col[j * 3], col[j * 3 + 1], col[j * 3 + 2]], sc[j]); }
     return { pos, col, sc };
   };
-  const drawGuitar = (x, s) => {
-    x.translate(s / 2, s / 2); x.rotate(-0.55); x.translate(-s / 2, -s / 2);
-    x.fillStyle = '#a67c52'; x.fillRect(s * 0.465, s * 0.06, s * 0.07, s * 0.46);
-    x.fillStyle = '#7a5a3a'; x.fillRect(s * 0.45, s * 0.02, s * 0.1, s * 0.07);
-    x.fillStyle = '#1f8fcf'; x.beginPath(); x.arc(s * 0.5, s * 0.58, s * 0.14, 0, 7); x.fill(); x.beginPath(); x.arc(s * 0.5, s * 0.78, s * 0.19, 0, 7); x.fill();
-    x.fillStyle = '#8fd0f2'; x.beginPath(); x.arc(s * 0.5, s * 0.78, s * 0.19, 0.2, 1.4); x.lineTo(s * 0.5, s * 0.78); x.fill();
-    x.globalCompositeOperation = 'destination-out'; x.beginPath(); x.arc(s * 0.5, s * 0.66, s * 0.055, 0, 7); x.fill();
-    x.globalCompositeOperation = 'source-over'; x.fillStyle = '#ffcd4d'; x.fillRect(s * 0.42, s * 0.84, s * 0.16, s * 0.025);
-    x.strokeStyle = '#eeeeee'; x.lineWidth = 1.5;
-    [-0.018, -0.006, 0.006, 0.018].forEach(o => { x.beginPath(); x.moveTo(s * (0.5 + o), s * 0.06); x.lineTo(s * (0.5 + o), s * 0.85); x.stroke(); });
-  };
   const drawLeaf = (x, s) => {
     const g = x.createLinearGradient(0, s, s, 0); g.addColorStop(0, '#337a45'); g.addColorStop(0.6, '#5aa65a'); g.addColorStop(1, '#9ad97c');
     x.fillStyle = g; x.beginPath(); x.moveTo(s * 0.16, s * 0.86);
@@ -141,22 +130,22 @@
     [[0.32, 0.7, 0.28, 0.45], [0.46, 0.57, 0.5, 0.3], [0.6, 0.43, 0.72, 0.22], [0.38, 0.64, 0.6, 0.72], [0.53, 0.5, 0.76, 0.5]].forEach(([a, b, c, d]) => { x.beginPath(); x.moveTo(a * s, b * s); x.lineTo(c * s, d * s); x.stroke(); });
   };
 
+  const LAST = 3; // index of the final stage (rubbish → logo → puppet → leaf)
   const targets = [stage0()];
   let ready = false;
   const img = new Image();
   img.onload = () => {
     targets[1] = sample((x, s) => { const r = img.width / img.height, w = r > 1 ? s : s * r, h = r > 1 ? s / r : s; x.drawImage(img, (s - w) / 2, (s - h) / 2, w, h); }, 36);
     targets[2] = samplePuppet(40);
-    targets[3] = sample(drawGuitar, 40);
-    targets[4] = sample(drawLeaf, 38);
+    targets[3] = sample(drawLeaf, 38);
     ready = true;
   };
   img.src = (document.documentElement.dataset.root || '') + 'assets/img/logo-mark.png';
 
   /* ---------- Layout ---------- */
   let wide = true, halfW = 40, halfH = 25;
-  const offsets = [0, -1, 1, -1, 0];
-  const stageScale = [1, 0.78, 0.84, 0.74, 0.72], stageZ = [0, 0, 0, 0, -22];
+  const offsets = [0, -1, 1, 0];
+  const stageScale = [1, 0.78, 0.84, 0.72], stageZ = [0, 0, 0, -22];
   const resize = () => {
     const w = innerWidth, h = innerHeight;
     renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
@@ -173,7 +162,7 @@
   const onScroll = () => {
     const r = stagesEl.getBoundingClientRect();
     const total = r.height - innerHeight;
-    pTarget = Math.min(4, Math.max(0, (-r.top / total) * 4));
+    pTarget = Math.min(LAST, Math.max(0, (-r.top / total) * LAST));
     prog.classList.toggle('is-hidden', r.bottom < innerHeight * 0.6);
   };
   addEventListener('scroll', onScroll, { passive: true }); onScroll();
@@ -192,16 +181,16 @@
     if (!visible) return;
     const t = reduce ? 0 : now * 0.001;
     p += (pTarget - p) * 0.14;
-    const i = Math.min(3, Math.floor(p)), f = p - i;
+    const i = Math.min(LAST - 1, Math.floor(p)), f = p - i;
     const e = (ready || i === 0) ? smooth(0.12, 0.88, f) : 0;
-    const A = targets[i], B = (ready ? targets[Math.min(4, i + 1)] : null) || targets[i];
+    const A = targets[i], B = (ready ? targets[Math.min(LAST, i + 1)] : null) || targets[i];
     const burst = Math.sin(Math.PI * e) * 9;
     const ox = k => (wide ? offsets[k] * Math.min(15, halfW * 0.42) : 0);
     const oy = k => (wide || k === 0 ? 0 : halfH * 0.32);
     const sc = wide ? 1 : Math.min(1, (halfW * 1.7) / 40);
     const cur = Math.round(p);
     if (cur !== lastStage) { lastStage = cur; numIdx.textContent = '0' + cur; numName.textContent = stageNames[cur] || ''; }
-    numBar.style.transform = `scaleX(${p / 4})`;
+    numBar.style.transform = `scaleX(${p / LAST})`;
 
     for (let n = 0; n < N; n++) {
       const o = inst[n], j = n * 3;

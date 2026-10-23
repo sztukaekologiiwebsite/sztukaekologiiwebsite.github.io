@@ -33,33 +33,6 @@
 .t2t-skip:hover { background: rgba(246, 242, 233, 0.22); transform: translateY(2px); }
 
 /* ==========================================================================
-   Trash-band soundboard (Recykling Idei cover)
-   ========================================================================== */
-.ph--band { overflow: hidden; }
-.sb-layer { position: absolute; z-index: 2; }
-.sb-spot { --s: clamp(38px, 4.4vw, 56px); position: absolute; left: var(--x); top: var(--y); width: var(--s); height: var(--s); margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
-  border-radius: 50%; border: 0; padding: 0; cursor: pointer; background: rgba(255, 255, 255, 0.28); box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.85), 0 6px 18px rgba(0, 0, 0, 0.3);
-  -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); transition: transform 0.35s var(--ease), background-color 0.3s; }
-.sb-spot::before, .sb-spot::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid #fff; animation: sb-pulse 2.4s ease-out infinite; pointer-events: none; }
-.sb-spot::after { animation-delay: 1.2s; }
-.sb-spot:hover, .sb-spot:focus-visible { transform: scale(1.15); background: rgba(255, 205, 77, 0.55); outline: none; }
-.sb-spot.is-hit { animation: sb-hit 0.45s var(--ease); }
-.sb-label { position: absolute; left: 50%; bottom: calc(100% + 10px); transform: translate(-50%, 6px); white-space: nowrap; padding: 0.35rem 0.7rem; border-radius: 999px;
-  background: var(--forest); color: var(--cream); font-size: 0.78rem; font-weight: 700; opacity: 0; pointer-events: none; transition: opacity 0.25s, transform 0.3s var(--ease); }
-.sb-spot:hover .sb-label, .sb-spot:focus-visible .sb-label { opacity: 1; transform: translate(-50%, 0); }
-.sb-note { position: absolute; left: 50%; top: 0; font-size: 1.5rem; font-weight: 800; color: #fff; text-shadow: 0 2px 6px rgba(0, 0, 0, 0.45); pointer-events: none; animation: sb-note 1.4s ease-out both; }
-.sb-hint { position: absolute; z-index: 3; left: clamp(12px, 2vw, 24px); bottom: clamp(12px, 2vw, 24px); display: inline-flex; align-items: center; gap: 0.5rem;
-  padding: 0.5rem 0.95rem 0.5rem 0.55rem; border-radius: 999px; background: rgba(15, 42, 27, 0.82); color: var(--cream); font-size: 0.85rem; font-weight: 600;
-  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transition: opacity 0.6s, transform 0.6s var(--ease); pointer-events: none; }
-.sb-hint-ic { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--sun); color: var(--forest); font-size: 0.95rem; animation: sb-bob 1.6s ease-in-out infinite; }
-.sb-played .sb-hint { opacity: 0; transform: translateY(10px); }
-@keyframes sb-pulse { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.9); opacity: 0; } }
-@keyframes sb-hit { 0% { transform: scale(1); } 35% { transform: scale(1.35); } 100% { transform: scale(1); } }
-@keyframes sb-note { 0% { transform: translate(-50%, 0) scale(0.6); opacity: 0; } 15% { opacity: 1; } 100% { transform: translate(calc(-50% + var(--dx)), -110px) scale(1.2) rotate(18deg); opacity: 0; } }
-@keyframes sb-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px) rotate(-10deg); } }
-@media (prefers-reduced-motion: reduce) { .sb-spot::before, .sb-spot::after, .sb-hint-ic { animation: none; } }
-
-/* ==========================================================================
    Puppet theatre (The Masters of Puppets)
    ========================================================================== */
 .puppet-sec { overflow: hidden; }
